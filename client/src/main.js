@@ -1,5 +1,8 @@
 import { HeaderView } from "./ui/header/index.js";
-import { Tarte } from "./ui/tarte/tarte.js";
+import { Tarte } from "./ui/graphic/tarte.js";
+import { Barre } from "./ui/graphic/barre.js";
+import { Orderitems } from "./data/orderitems.js";
+import { Products } from "./data/products.js";
 import { Orders } from "./data/order.js";
 
 let C = {};
@@ -11,11 +14,13 @@ C.init = async function() {
 let V = {
     header: document.querySelector("#header"),
     main: document.querySelector("#main"),
+    graphic: document.querySelector("#graphic-barre"),
 };
 
 V.init = function() {
     V.renderHeader();
     V.renderMain();
+    V.renderGraphic();
 };
 
 V.renderHeader = function() {
@@ -50,5 +55,59 @@ V.renderMain = async function() {
     ];*/
     Tarte.updateData(newData);
 };
+
+
+
+V.renderGraphic = async function() {
+
+    Barre.init();
+
+    let orderItems = await Orderitems.fetchAll();
+    let orders = await Orders.fetchAll();
+    let products = await Products.fetchAll();
+
+    let twoMonthsAgo = new Date();
+    twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+
+    let filteredOrderItems = orderItems.filter(oi => {
+        let order = orders.find(o => o.id === oi.order_id);
+        return new Date(order.order_date) >= twoMonthsAgo;
+    });
+
+    let salesData = filteredOrderItems.reduce((acc, oi) => {
+        let product = products.find(p => p.id === oi.product_id);
+        let existing = acc.find(item => item.product_name === product.product_name);
+        if (existing) {
+            existing.total_sales += oi.quantity;
+        } else {
+            acc.push({ product_name: product.product_name, total_sales: oi.quantity });
+        }
+        return acc;
+    }, []);
+console.log(salesData);
+    salesData.sort((a, b) => b.total_sales - a.total_sales);
+
+    let topSalesData = salesData.slice(0, 3);
+    console.log(topSalesData);
+
+   /* let newData = topSalesData.map(item => {
+        return { value: item.total_sales, name: item.product_name };
+    });
+
+    Barre.updateData(newData);*/
+
+let xAxisData = topSalesData.map(item => item.product_name);
+let seriesData = topSalesData.map(item => item.total_sales);
+console.log(xAxisData);
+console.log(seriesData);
+
+Barre.updateData(seriesData, xAxisData);
+
+    
+
+    
+
+   
+}
 
 C.init();
