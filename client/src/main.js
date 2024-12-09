@@ -22,19 +22,32 @@ V.renderHeader = function() {
     V.header.innerHTML = HeaderView.render();
 };
 
-V.renderMain = function() {
+V.renderMain = async function() {
     // Initialiser le graphique
-    let ord= Orders.fetchAll(); 
-    console.log(ord);
+    let ord= await Orders.fetchAll(); 
+    let filteredOrders = ord.reduce((acc, order) => {
+        let existing = acc.find(item => item.order_status === order.order_status);
+        if (existing) {
+            existing.total_orders += 1;
+        } else {
+            acc.push({ order_status: order.order_status, total_orders: 1 });
+        }
+        return acc;
+    }, []);
+    // filtrer en utilisant le sql: SELECT order_status, COUNT(*) AS total_orders FROM Orders GROUP BY order_status;
+
     Tarte.init();
 
-    // Mettre à jour les données du graphique
-    const newData = [
+    // Mettre à jour les données du graphique grace a filteredOrders
+    let newData = filteredOrders.map(order => {
+        return { value: order.total_orders, name: order.order_status };
+    });
+   /* const newData = [
         { value: 55, name: 'Haricot' },
         { value: 2, name: 'Brocoli' },
         { value: 25, name: 'Courgette' },
         { value: 105, name: 'Tomate' },
-    ];
+    ];*/
     Tarte.updateData(newData);
 };
 
