@@ -1,9 +1,12 @@
 <?php
 require_once "Class/HttpRequest.php";
-
-
+require_once "Controller/ClientsController.php";
+require_once "Controller/OrderItemsController.php";
+require_once "Controller/OrdersController.php";
+require_once "Controller/ProductsController.php";
 /** IMPORTANT
  * 
+
  *  De part le .htaccess, toutes les requêtes seront redirigées vers ce fichier index.php
  * 
  *  On pose le principe que toutes les requêtes, pour être valides, doivent être dee la forme :
@@ -24,7 +27,10 @@ require_once "Class/HttpRequest.php";
  *  On ajoutera des "routes" à $router si l'on a d'autres ressource à traiter.
  */
 $router = [
-    
+    "clients" => new ClientsController(),
+    "orderitems" => new OrderItemsController(),
+    "orders" => new OrdersController(),
+    "products" => new ProductsController()
 ];
 
 // objet HttpRequest qui contient toutes les infos utiles sur la requêtes (voir class/HttpRequest.php)
