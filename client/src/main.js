@@ -2,6 +2,7 @@ import { HeaderView } from "./ui/header/index.js";
 import { Tarte } from "./ui/graphic/tarte.js";
 import { Barre } from "./ui/graphic/barre.js";
 import { Courbe } from "./ui/graphic/courbe.js";
+import { BarreCourbe } from "./ui/graphic/barrecourbe.js";
 import { Orderitems } from "./data/orderitems.js";
 import { Products } from "./data/products.js";
 import { Orders } from "./data/order.js";
@@ -16,6 +17,8 @@ let V = {
     header: document.querySelector("#header"),
     main: document.querySelector("#main"),
     graphic: document.querySelector("#graphic-barre"),
+    courbe: document.querySelector("#graphic-courbe"),
+    barrecourbe: document.querySelector("#graphic-barrecourbe"),
 };
 
 V.init = function() {
@@ -23,6 +26,7 @@ V.init = function() {
     V.renderMain();
     V.renderGraphic();
     V.renderCourbe();
+    V.renderBarreCourbe();
 };
 
 V.renderHeader = function() {
@@ -146,5 +150,81 @@ console.log(seriesData);
 Courbe.updateData(seriesData, xAxisData);
 
 }
+
+
+V.renderBarreCourbe = async function() {
+    BarreCourbe.init();
+
+    let orders = await Orders.fetchAll();
+    let orderItems = await Orderitems.fetchAll();
+    let products = await Products.fetchAll();
+
+    let sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 4);
+
+    let filteredOrders = orders.filter(o => new Date(o.order_date) >= sixMonthsAgo);
+
+    let monthlySales = filteredOrders.reduce((acc, order) => {
+        let month = order.order_date.slice(0, 7); // Format YYYY-MM
+        let orderItemsForOrder = orderItems.filter(oi => oi.order_id === order.id);
+        let monthlyTotal = orderItemsForOrder.reduce((sum, oi) => {
+            let product = products.find(p => p.id === oi.product_id);
+            return sum + (oi.quantity * product.price);
+        }, 0);
+
+        let existing = acc.find(item => item.month === month);
+        if (existing) {
+            existing.monthly_sales += monthlyTotal;
+        } else {
+            acc.push({ month: month, monthly_sales: monthlyTotal });
+        }
+        return acc;
+    }, []);
+
+    monthlySales.sort((a, b) => new Date(a.month) - new Date(b.month));
+
+
+    let xAxisData = monthlySales.map(item => item.month);
+    
+    let series = products.reduce((acc, product) => {
+        let productSales = monthlySales.map(monthlySale => {
+            let orderItemsForMonth = orderItems.filter(oi => {
+                let order = orders.find(o => o.id === oi.order_id);
+                return order.order_date.slice(0, 7) === monthlySale.month && oi.product_id === product.id;
+            });
+            return orderItemsForMonth.reduce((sum, oi) => sum + (oi.quantity * product.price), 0);
+        });
+
+        let existingCategory = acc.find(item => item.name === product.category);
+        if (existingCategory) {
+            existingCategory.data = existingCategory.data.map((value, index) => value + productSales[index]);
+        } else {
+            acc.push({
+                name: product.category,
+                type: 'bar',
+                tooltip: {
+                    valueFormatter: function (value) {
+                        return value + ' $';
+                    }
+                },
+                data: productSales
+            });
+        }
+        return acc;
+    }, []);
+
+let newlegendData = products.map(product => product.category);
+console.log(newlegendData);
+
+console.log(xAxisData);
+console.log(series);
+
+
+
+BarreCourbe.updateData(series, xAxisData, newlegendData);
+};
+
+
+
 
 C.init();
