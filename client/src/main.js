@@ -1,6 +1,7 @@
 import { HeaderView } from "./ui/header/index.js";
 import { Tarte } from "./ui/graphic/tarte.js";
 import { Barre } from "./ui/graphic/barre.js";
+import { Courbe } from "./ui/graphic/courbe.js";
 import { Orderitems } from "./data/orderitems.js";
 import { Products } from "./data/products.js";
 import { Orders } from "./data/order.js";
@@ -21,6 +22,7 @@ V.init = function() {
     V.renderHeader();
     V.renderMain();
     V.renderGraphic();
+    V.renderCourbe();
 };
 
 V.renderHeader = function() {
@@ -84,11 +86,11 @@ V.renderGraphic = async function() {
         }
         return acc;
     }, []);
-console.log(salesData);
+
     salesData.sort((a, b) => b.total_sales - a.total_sales);
 
     let topSalesData = salesData.slice(0, 3);
-    console.log(topSalesData);
+    
 
    /* let newData = topSalesData.map(item => {
         return { value: item.total_sales, name: item.product_name };
@@ -98,16 +100,51 @@ console.log(salesData);
 
 let xAxisData = topSalesData.map(item => item.product_name);
 let seriesData = topSalesData.map(item => item.total_sales);
+
+Barre.updateData(seriesData, xAxisData);
+   
+}
+
+V.renderCourbe = async function() {
+    Courbe.init();
+
+
+    let orders = await Orders.fetchAll();
+    let orderItems = await Orderitems.fetchAll();
+    let products = await Products.fetchAll();
+
+    let sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 4);
+
+    let filteredOrders = orders.filter(o => new Date(o.order_date) >= sixMonthsAgo);
+
+    let monthlySales = filteredOrders.reduce((acc, order) => {
+        let month = order.order_date.slice(0, 7); // Format YYYY-MM
+        let orderItemsForOrder = orderItems.filter(oi => oi.order_id === order.id);
+        let monthlyTotal = orderItemsForOrder.reduce((sum, oi) => {
+            let product = products.find(p => p.id === oi.product_id);
+            return sum + (oi.quantity * product.price);
+        }, 0);
+
+        let existing = acc.find(item => item.month === month);
+        if (existing) {
+            existing.monthly_sales += monthlyTotal;
+        } else {
+            acc.push({ month: month, monthly_sales: monthlyTotal });
+        }
+        return acc;
+    }, []);
+
+    monthlySales.sort((a, b) => new Date(a.month) - new Date(b.month));
+
+    let xAxisData = monthlySales.map(item => item.month);
+    let seriesData = monthlySales.map(item => item.monthly_sales);
+
 console.log(xAxisData);
 console.log(seriesData);
 
-Barre.updateData(seriesData, xAxisData);
+Courbe.updateData(seriesData, xAxisData);
 
-    
-
-    
-
-   
 }
 
 C.init();

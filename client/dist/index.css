@@ -558,8 +558,56 @@ video {
   height: 100svh;
 }
 
+.h-screen {
+  height: 100vh;
+}
+
+.h-dvh {
+  height: 100dvh;
+}
+
+.h-\[70vh\] {
+  height: 70vh;
+}
+
+.h-\[70svh\] {
+  height: 70svh;
+}
+
+.h-\[70rem\] {
+  height: 70rem;
+}
+
+.h-\[40rem\] {
+  height: 40rem;
+}
+
 .w-svw {
   width: 100svw;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.w-dvw {
+  width: 100dvw;
+}
+
+.w-\[70vh\] {
+  width: 70vh;
+}
+
+.w-\[70svh\] {
+  width: 70svh;
+}
+
+.w-\[70rem\] {
+  width: 70rem;
+}
+
+.w-\[40rem\] {
+  width: 40rem;
 }
 
 .bg-gray-100 {
