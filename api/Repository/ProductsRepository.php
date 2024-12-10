@@ -48,6 +48,18 @@ class ProductsRepository extends EntityRepository {
         return $res;
     }
 
+
+    public function getStatInteration7(){
+        $requete = $this->cnx->prepare("SELECT product_name, stock
+FROM Products
+ORDER BY stock ASC
+LIMIT 10;
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
     public function save($product){
         // Not implemented ! TODO when needed !          
         return false;

@@ -16,6 +16,12 @@ class ProductsController extends Controller {
 
    
     protected function processGetRequest(HttpRequest $request) {
+
+        $stat = $request->getParam('stat');
+        if ($stat=='iteration7'){
+            return $this->products->getStatInteration7();
+        }
+
         $id = $request->getId("id");
         if ($id){
             // URI is .../Products/{id}

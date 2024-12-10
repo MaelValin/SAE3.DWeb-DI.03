@@ -4,6 +4,7 @@ export const BarreCourbe = {
 
     init: function() {
         const dom = document.getElementById('graphic-barrecourbe');
+        
         this.chart = echarts.init(dom, null, {
             renderer: 'canvas',
             useDirtyRect: false

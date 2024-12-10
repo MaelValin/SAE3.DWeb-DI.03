@@ -4,8 +4,11 @@ export const Tarte = {
 
   init: function() {
     const chartDom = document.getElementById('main');
-    this.chart = echarts.init(chartDom, 'dark'); // Initialiser le graphique
-
+    //this.chart = echarts.init(chartDom, 'dark');
+    this.chart = echarts.init(chartDom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+  });
     // Options initiales du graphique
     this.option = {
       title: {

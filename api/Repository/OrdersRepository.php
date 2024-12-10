@@ -97,9 +97,6 @@ ORDER BY
 FROM Orders
 WHERE order_date >= DATE_SUB(CURDATE(), INTERVAL 4 MONTH)
 ORDER BY month ASC;
-
-
-
 ");
         $requete->execute();
         $answer = $requete->fetchAll(PDO::FETCH_OBJ);

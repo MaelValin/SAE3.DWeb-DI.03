@@ -3,6 +3,7 @@ import { Tarte } from "./ui/graphic/tarte.js";
 import { Barre } from "./ui/graphic/barre.js";
 import { Courbe } from "./ui/graphic/courbe.js";
 import { BarreCourbe } from "./ui/graphic/barrecourbe.js";
+import { Demicercle } from "./ui/graphic/demicercle.js";
 
 import { Orderitems } from "./data/orderitems.js";
 import { Products } from "./data/products.js";
@@ -28,6 +29,7 @@ V.init = function () {
   V.renderGraphic();
   V.renderCourbe();
   V.renderBarreCourbe();
+  V.renderDemicercle();
 };
 
 V.renderHeader = function () {
@@ -65,6 +67,8 @@ V.renderGraphic = async function () {
   Barre.updateData(seriesData, xAxisData);
 };
 
+
+
 V.renderCourbe = async function () {
   Courbe.init();
 
@@ -75,6 +79,8 @@ V.renderCourbe = async function () {
 
   Courbe.updateData(seriesData, xAxisData);
 };
+
+
 
 V.renderBarreCourbe = async function () {
   BarreCourbe.init();
@@ -98,5 +104,19 @@ V.renderBarreCourbe = async function () {
 
   BarreCourbe.updateData(series, xAxisData, newlegendData);
 };
+
+
+
+
+V.renderDemicercle = async function () {
+    let stock= await Products.fetchIteration7();
+Demicercle.init();
+
+let newstock = stock.map((stock) => {
+    return { value: stock.stock, name: stock.product_name };
+  });
+
+Demicercle.updateData(newstock);
+}
 
 C.init();

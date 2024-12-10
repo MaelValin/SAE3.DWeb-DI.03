@@ -13,7 +13,13 @@ Products.fetchAll = async function(){
     return data;
 }
 
-//une fonction qui permet de repondre cette requete: SELECT order_status, COUNT(*) AS total_Products FROM Products GROUP BY order_status;
+
+Products.fetchIteration7= async function(){
+    let data = await getRequest('products?stat=iteration7');
+    return data;
+
+}
+
 
 
 export {Products};
