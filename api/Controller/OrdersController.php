@@ -16,6 +16,12 @@ class OrdersController extends Controller {
 
    
     protected function processGetRequest(HttpRequest $request) {
+
+        $stat = $request->getParam('stat');
+        if ($stat=='iteration3'){
+            return $this->orders->getStatInteration3();
+        }
+        
         $id = $request->getId("id");
         if ($id){
             // URI is .../Orders/{id}

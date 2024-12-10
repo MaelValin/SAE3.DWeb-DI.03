@@ -8,6 +8,12 @@ Orders.fetch= async function(id){
 
 }
 
+Orders.fetchIteration3= async function(){
+    let data = await getRequest('orders?stat=iteration3');
+    return data;
+
+}
+
 Orders.fetchAll = async function(){
     let data = await getRequest('orders');
     return data;

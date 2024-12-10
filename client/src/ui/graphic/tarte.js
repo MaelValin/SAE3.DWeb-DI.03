@@ -15,7 +15,7 @@ export const Tarte = {
       legend: { top: '5%', left: 'center' },
       series: [
         {
-          name: 'Accès via',
+          name: 'Statut des commandes',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,

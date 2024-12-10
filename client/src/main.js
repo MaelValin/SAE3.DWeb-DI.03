@@ -37,24 +37,22 @@ V.renderHeader = function() {
 
 V.renderMain = async function() {
     // Initialiser le graphique
-    let ord= await Orders.fetchAll(); 
-    let filteredOrders = ord.reduce((acc, order) => {
-        let existing = acc.find(item => item.order_status === order.order_status);
-        if (existing) {
-            existing.total_orders += 1;
-        } else {
-            acc.push({ order_status: order.order_status, total_orders: 1 });
-        }
-        return acc;
-    }, []);
-    // filtrer en utilisant le sql: SELECT order_status, COUNT(*) AS total_orders FROM Orders GROUP BY order_status;
-
+    let ord= await Orders.fetchIteration3(); 
+    console.log(ord);
+    console.log(ord[0].montant);
+    
     Tarte.init();
 
-    // Mettre à jour les données du graphique grace a filteredOrders
-    let newData = filteredOrders.map(order => {
-        return { value: order.total_orders, name: order.order_status };
+    // Mettre à jour les données du graphique grace a ord
+let newData= 
+    ord.map(order => {
+        return { value: order.montant, name: order.order_status };
     });
+    
+    
+    
+
+    console.log(newData);
    /* const newData = [
         { value: 55, name: 'Haricot' },
         { value: 2, name: 'Brocoli' },

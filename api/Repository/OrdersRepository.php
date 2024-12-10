@@ -62,4 +62,11 @@ class OrdersRepository extends EntityRepository {
         // Not implemented ! TODO when needed !
         return false;
     }
+
+    public function getStatInteration3(){
+        $requete = $this->cnx->prepare("select order_status, count(*) as montant from Orders group by order_status");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
 }
