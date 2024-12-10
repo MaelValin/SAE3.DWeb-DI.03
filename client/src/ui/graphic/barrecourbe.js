@@ -11,6 +11,9 @@ export const BarreCourbe = {
 
         // Options initiales du graphique
         this.option = {
+            title: {
+                text: 'Revenus totaux des six derniers mois par Categorie',
+              },  
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {

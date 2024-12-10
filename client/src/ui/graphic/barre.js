@@ -11,6 +11,9 @@ export const Barre = {
 
         // Options initiales du graphique
         this.option = {
+            title: {
+                text: 'Meilleures ventes des deux dernièrs mois',
+              },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {

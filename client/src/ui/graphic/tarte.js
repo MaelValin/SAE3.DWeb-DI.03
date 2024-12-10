@@ -8,6 +8,9 @@ export const Tarte = {
 
     // Options initiales du graphique
     this.option = {
+      title: {
+        text: 'Livraison des commandes',
+      },
       tooltip: { trigger: 'item' },
       legend: { top: '5%', left: 'center' },
       series: [

@@ -10,7 +10,10 @@ export const Courbe = {
     });
 
     // Options initiales du graphique
-    this.option = {      
+    this.option = { 
+      title: {
+        text: 'Revenus totaux des six derniers mois',
+      },     
       tooltip: {
         trigger: 'axis',
         axisPointer: {
