@@ -69,4 +69,56 @@ class OrdersRepository extends EntityRepository {
         $answer = $requete->fetchAll(PDO::FETCH_OBJ);
         return $answer;
     }
+
+    public function getStatInteration5(){
+        $requete = $this->cnx->prepare("SELECT 
+    DATE_FORMAT(o.order_date, '%Y-%m') AS month,
+    SUM(oi.quantity * p.price) AS monthly_sales
+FROM 
+    Orders o
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+JOIN 
+    Products p ON oi.product_id = p.id
+WHERE 
+    o.order_date >= CURDATE() - INTERVAL 4 MONTH
+GROUP BY 
+    month
+ORDER BY 
+    month ASC;");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    public function getStatInteration3(){
+        $requete = $this->cnx->prepare("select order_status, count(*) as montant from Orders group by order_status");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    public function getStatInteration6(){
+        $requete = $this->cnx->prepare("SELECT 
+    DATE_FORMAT(o.order_date, '%Y-%m') AS month,
+    p.category AS product_category,
+    SUM(oi.quantity * p.price) AS total_sales
+FROM 
+    Orders o
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+JOIN 
+    Products p ON oi.product_id = p.id
+WHERE 
+    o.order_date >= CURDATE() - INTERVAL 6 MONTH
+GROUP BY 
+    month, product_category
+ORDER BY 
+    month DESC, total_sales DESC;
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
 }

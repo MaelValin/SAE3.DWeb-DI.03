@@ -68,15 +68,10 @@ V.renderGraphic = async function() {
     Barre.init();
 
     let orderItems = await Orderitems.fetchiteration4();
-    
-    
-
-    
 
 let xAxisData = orderItems.map(item => item.product_name);
 let seriesData = orderItems.map(item => item.total_sales);
-console.log(xAxisData);
-console.log(seriesData);
+
 Barre.updateData(seriesData, xAxisData);
    
 }
@@ -84,40 +79,10 @@ Barre.updateData(seriesData, xAxisData);
 V.renderCourbe = async function() {
     Courbe.init();
 
+    let orders = await Orders.fetchIteration5();
 
-    let orders = await Orders.fetchAll();
-    let orderItems = await Orderitems.fetchAll();
-    let products = await Products.fetchAll();
-
-    let sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 4);
-
-    let filteredOrders = orders.filter(o => new Date(o.order_date) >= sixMonthsAgo);
-
-    let monthlySales = filteredOrders.reduce((acc, order) => {
-        let month = order.order_date.slice(0, 7); // Format YYYY-MM
-        let orderItemsForOrder = orderItems.filter(oi => oi.order_id === order.id);
-        let monthlyTotal = orderItemsForOrder.reduce((sum, oi) => {
-            let product = products.find(p => p.id === oi.product_id);
-            return sum + (oi.quantity * product.price);
-        }, 0);
-
-        let existing = acc.find(item => item.month === month);
-        if (existing) {
-            existing.monthly_sales += monthlyTotal;
-        } else {
-            acc.push({ month: month, monthly_sales: monthlyTotal });
-        }
-        return acc;
-    }, []);
-
-    monthlySales.sort((a, b) => new Date(a.month) - new Date(b.month));
-
-    let xAxisData = monthlySales.map(item => item.month);
-    let seriesData = monthlySales.map(item => item.monthly_sales);
-
-
-
+    let xAxisData = orders.map(item => item.month);
+    let seriesData = orders.map(item => item.monthly_sales);
 
 Courbe.updateData(seriesData, xAxisData);
 
