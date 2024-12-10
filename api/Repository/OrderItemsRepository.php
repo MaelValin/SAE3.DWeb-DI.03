@@ -48,6 +48,20 @@ class OrderItemsRepository extends EntityRepository {
         return $res;
     }
 
+    public function getStatInteration4(){
+        $requete = $this->cnx->prepare("SELECT p.product_name, SUM(oi.quantity) AS total_sales
+FROM OrderItems oi
+JOIN Orders o ON oi.order_id = o.id
+JOIN Products p ON oi.product_id = p.id
+WHERE o.order_date >= CURDATE() - INTERVAL 2 MONTH
+GROUP BY p.product_name
+ORDER BY total_sales DESC
+LIMIT 3;");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
     public function save($orderItem){
         // Not implemented ! TODO when needed !          
         return false;

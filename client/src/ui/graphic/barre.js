@@ -42,7 +42,7 @@ export const Barre = {
             ],
             series: [
                 {
-                    name: 'Direct',
+                    name: 'Ventes',
                     type: 'bar',
                     barWidth: '60%',
                     data: [10, 52, 200, 334, 390, 330, 220]

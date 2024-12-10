@@ -16,6 +16,12 @@ class OrderItemsController extends Controller {
 
    
     protected function processGetRequest(HttpRequest $request) {
+
+        $stat = $request->getParam('stat');
+        if ($stat=='iteration4'){
+            return $this->orderItems->getStatInteration4();
+        }
+
         $id = $request->getId("id");
         if ($id){
             // URI is .../orderItems/{id}
