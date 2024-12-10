@@ -28,6 +28,11 @@ class OrdersController extends Controller {
         }
 
         $stat = $request->getParam('stat');
+        if ($stat=='iteration6-date'){
+            return $this->orders->getStatInteration6Date();
+        }
+
+        $stat = $request->getParam('stat');
         if ($stat=='iteration6'){
             return $this->orders->getStatInteration6();
         }

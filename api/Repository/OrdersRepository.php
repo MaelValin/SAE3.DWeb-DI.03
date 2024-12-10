@@ -91,12 +91,21 @@ ORDER BY
         return $answer;
     }
 
-    public function getStatInteration3(){
-        $requete = $this->cnx->prepare("select order_status, count(*) as montant from Orders group by order_status");
+
+    public function getStatInteration6Date(){
+        $requete = $this->cnx->prepare("SELECT DISTINCT DATE_FORMAT(order_date, '%Y-%m') AS month
+FROM Orders
+WHERE order_date >= DATE_SUB(CURDATE(), INTERVAL 4 MONTH)
+ORDER BY month ASC;
+
+
+
+");
         $requete->execute();
         $answer = $requete->fetchAll(PDO::FETCH_OBJ);
         return $answer;
     }
+
 
     public function getStatInteration6(){
         $requete = $this->cnx->prepare("SELECT 
@@ -110,15 +119,23 @@ JOIN
 JOIN 
     Products p ON oi.product_id = p.id
 WHERE 
-    o.order_date >= CURDATE() - INTERVAL 6 MONTH
+    o.order_date >= CURDATE() - INTERVAL 4 MONTH
 GROUP BY 
     month, product_category
 ORDER BY 
-    month DESC, total_sales DESC;
+   product_category DESC, month ASC;
+
+
+
+
+
 ");
         $requete->execute();
         $answer = $requete->fetchAll(PDO::FETCH_OBJ);
         return $answer;
     }
+
+
+    
 
 }

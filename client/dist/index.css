@@ -554,20 +554,20 @@ video {
   display: none;
 }
 
-.h-svh {
-  height: 100svh;
-}
-
 .h-screen {
   height: 100vh;
 }
 
-.w-svw {
-  width: 100svw;
+.h-svh {
+  height: 100svh;
 }
 
 .w-screen {
   width: 100vw;
+}
+
+.w-svw {
+  width: 100svw;
 }
 
 .bg-gray-100 {

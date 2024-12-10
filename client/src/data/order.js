@@ -20,6 +20,18 @@ Orders.fetchIteration5= async function(){
 
 }
 
+Orders.fetchIteration6Date= async function(){
+    let data = await getRequest('orders?stat=iteration6-date');
+    return data;
+
+}
+
+Orders.fetchIteration6= async function(){
+    let data = await getRequest('orders?stat=iteration6');
+    return data;
+
+}
+
 Orders.fetchAll = async function(){
     let data = await getRequest('orders');
     return data;

@@ -12,8 +12,8 @@ export const BarreCourbe = {
         // Options initiales du graphique
         this.option = {
             title: {
-                text: 'Revenus totaux des six derniers mois par Categorie',
-              },  
+                text: 'Revenus totaux par Categorie',
+            },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -47,12 +47,10 @@ export const BarreCourbe = {
                 {
                     type: 'value',
                     name: 'Montant',
-                    
                     axisLabel: {
                         formatter: '{value} $'
                     }
                 },
-                
             ],
             series: [
                 {
@@ -67,7 +65,6 @@ export const BarreCourbe = {
                         2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
                     ]
                 },
-                
             ]
         };
 
@@ -81,22 +78,31 @@ export const BarreCourbe = {
     updateData: function(newSeriesData, newXAxisData, newlegendData) {
         // Vérifiez que 'option' est bien initialisé
         if (!this.option) {
-                console.error("Erreur : 'option' n'est pas encore initialisé.");
-                return;
+            console.error("Erreur : 'option' n'est pas encore initialisé.");
+            return;
         }
 
         // Vérifiez que 'series' est correctement défini
         if (!this.option.series) {
-                console.error("Erreur : 'series' n'est pas correctement définie dans l'option.");
-                return;
+            console.error("Erreur : 'series' n'est pas correctement définie dans l'option.");
+            return;
         }
 
-        // Mettre à jour les données dans le premier élément de 'series'
-        this.option.series = newSeriesData;
+        // Mettre à jour les données dans 'series'
+        this.option.series = newSeriesData.map((data, index) => ({
+            name: newlegendData[index],
+            type: 'bar',
+            tooltip: {
+                valueFormatter: function (value) {
+                    return value + ' $';
+                }
+            },
+            data: data
+        }));
 
         // Mettre à jour les données de xAxis[0] si nécessaire
         if (newXAxisData) {
-                this.option.xAxis[0].data = newXAxisData;
+            this.option.xAxis[0].data = newXAxisData;
         }
 
         if (newlegendData) {

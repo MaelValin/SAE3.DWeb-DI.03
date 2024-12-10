@@ -10,155 +10,93 @@ import { Orders } from "./data/order.js";
 
 let C = {};
 
-C.init = async function() {
-    V.init();
+C.init = async function () {
+  V.init();
 };
 
 let V = {
-    header: document.querySelector("#header"),
-    main: document.querySelector("#main"),
-    graphic: document.querySelector("#graphic-barre"),
-    courbe: document.querySelector("#graphic-courbe"),
-    barrecourbe: document.querySelector("#graphic-barrecourbe"),
+  header: document.querySelector("#header"),
+  main: document.querySelector("#main"),
+  graphic: document.querySelector("#graphic-barre"),
+  courbe: document.querySelector("#graphic-courbe"),
+  barrecourbe: document.querySelector("#graphic-barrecourbe"),
 };
 
-V.init = function() {
-    V.renderHeader();
-    V.renderMain();
-    V.renderGraphic();
-    V.renderCourbe();
-    V.renderBarreCourbe();
-   
+V.init = function () {
+  V.renderHeader();
+  V.renderMain();
+  V.renderGraphic();
+  V.renderCourbe();
+  V.renderBarreCourbe();
 };
 
-V.renderHeader = function() {
-    V.header.innerHTML = HeaderView.render();
+V.renderHeader = function () {
+  V.header.innerHTML = HeaderView.render();
 };
 
-V.renderMain = async function() {
-    // Initialiser le graphique
-    let ord= await Orders.fetchIteration3(); 
-    
-    
-    Tarte.init();
+V.renderMain = async function () {
+  // Initialiser le graphique
+  let ord = await Orders.fetchIteration3();
 
-    // Mettre à jour les données du graphique grace a ord
-let newData= 
-    ord.map(order => {
-        return { value: order.montant, name: order.order_status };
-    });
-    
-    
-    
+  Tarte.init();
 
-   
-   /* const newData = [
+  // Mettre à jour les données du graphique grace a ord
+  let newData = ord.map((order) => {
+    return { value: order.montant, name: order.order_status };
+  });
+
+  /* const newData = [
         { value: 55, name: 'Haricot' },
         { value: 2, name: 'Brocoli' },
         { value: 25, name: 'Courgette' },
         { value: 105, name: 'Tomate' },
     ];*/
-    Tarte.updateData(newData);
+  Tarte.updateData(newData);
 };
 
+V.renderGraphic = async function () {
+  Barre.init();
 
+  let orderItems = await Orderitems.fetchiteration4();
 
-V.renderGraphic = async function() {
+  let xAxisData = orderItems.map((item) => item.product_name);
+  let seriesData = orderItems.map((item) => item.total_sales);
 
-    Barre.init();
-
-    let orderItems = await Orderitems.fetchiteration4();
-
-let xAxisData = orderItems.map(item => item.product_name);
-let seriesData = orderItems.map(item => item.total_sales);
-
-Barre.updateData(seriesData, xAxisData);
-   
-}
-
-V.renderCourbe = async function() {
-    Courbe.init();
-
-    let orders = await Orders.fetchIteration5();
-
-    let xAxisData = orders.map(item => item.month);
-    let seriesData = orders.map(item => item.monthly_sales);
-
-Courbe.updateData(seriesData, xAxisData);
-
-}
-
-
-V.renderBarreCourbe = async function() {
-    BarreCourbe.init();
-
-    let orders = await Orders.fetchAll();
-    let orderItems = await Orderitems.fetchAll();
-    let products = await Products.fetchAll();
-
-    let sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 4);
-
-    let filteredOrders = orders.filter(o => new Date(o.order_date) >= sixMonthsAgo);
-
-    let monthlySales = filteredOrders.reduce((acc, order) => {
-        let month = order.order_date.slice(0, 7); // Format YYYY-MM
-        let orderItemsForOrder = orderItems.filter(oi => oi.order_id === order.id);
-        let monthlyTotal = orderItemsForOrder.reduce((sum, oi) => {
-            let product = products.find(p => p.id === oi.product_id);
-            return sum + (oi.quantity * product.price);
-        }, 0);
-
-        let existing = acc.find(item => item.month === month);
-        if (existing) {
-            existing.monthly_sales += monthlyTotal;
-        } else {
-            acc.push({ month: month, monthly_sales: monthlyTotal });
-        }
-        return acc;
-    }, []);
-
-    monthlySales.sort((a, b) => new Date(a.month) - new Date(b.month));
-
-
-    let xAxisData = monthlySales.map(item => item.month);
-    
-    let series = products.reduce((acc, product) => {
-        let productSales = monthlySales.map(monthlySale => {
-            let orderItemsForMonth = orderItems.filter(oi => {
-                let order = orders.find(o => o.id === oi.order_id);
-                return order.order_date.slice(0, 7) === monthlySale.month && oi.product_id === product.id;
-            });
-            return orderItemsForMonth.reduce((sum, oi) => sum + (oi.quantity * product.price), 0);
-        });
-
-        let existingCategory = acc.find(item => item.name === product.category);
-        if (existingCategory) {
-            existingCategory.data = existingCategory.data.map((value, index) => value + productSales[index]);
-        } else {
-            acc.push({
-                name: product.category,
-                type: 'bar',
-                tooltip: {
-                    valueFormatter: function (value) {
-                        return value + ' $';
-                    }
-                },
-                data: productSales
-            });
-        }
-        return acc;
-    }, []);
-
-let newlegendData = products.map(product => product.category);
-
-
-
-
-BarreCourbe.updateData(series, xAxisData, newlegendData);
+  Barre.updateData(seriesData, xAxisData);
 };
 
+V.renderCourbe = async function () {
+  Courbe.init();
 
+  let orders = await Orders.fetchIteration5();
 
+  let xAxisData = orders.map((item) => item.month);
+  let seriesData = orders.map((item) => item.monthly_sales);
+
+  Courbe.updateData(seriesData, xAxisData);
+};
+
+V.renderBarreCourbe = async function () {
+  BarreCourbe.init();
+
+  let order6 = await Orders.fetchIteration6();
+  let order6date = await Orders.fetchIteration6Date();
+
+  let categorySalesMap = {};
+
+  order6.forEach((item) => {
+    if (!categorySalesMap[item.product_category]) {
+      categorySalesMap[item.product_category] = [];
+    }
+    categorySalesMap[item.product_category].push(item.total_sales);
+  });
+
+  let series = Object.values(categorySalesMap);
+  let newlegendData = Object.keys(categorySalesMap);
+
+  let xAxisData = order6date.map((item) => item.month);
+
+  BarreCourbe.updateData(series, xAxisData, newlegendData);
+};
 
 C.init();
