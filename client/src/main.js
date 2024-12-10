@@ -4,6 +4,8 @@ import { Barre } from "./ui/graphic/barre.js";
 import { Courbe } from "./ui/graphic/courbe.js";
 import { BarreCourbe } from "./ui/graphic/barrecourbe.js";
 import { Demicercle } from "./ui/graphic/demicercle.js";
+import { ChoixView } from "./ui/choix/script.js";
+import { Couche } from "./ui/graphic/couche.js";
 
 import { Orderitems } from "./data/orderitems.js";
 import { Products } from "./data/products.js";
@@ -21,6 +23,8 @@ let V = {
   graphic: document.querySelector("#graphic-barre"),
   courbe: document.querySelector("#graphic-courbe"),
   barrecourbe: document.querySelector("#graphic-barrecourbe"),
+  demicercle: document.querySelector("#graphic-demicercle"),
+  choix: document.querySelector("#choix"),
 };
 
 V.init = function () {
@@ -30,6 +34,14 @@ V.init = function () {
   V.renderCourbe();
   V.renderBarreCourbe();
   V.renderDemicercle();
+  V.renderChoix();
+  V.renderproduct('all');
+
+
+  let product = document.querySelector("#choix");
+  product.addEventListener("click", C.handler_clickOnproduct);
+
+  
 };
 
 V.renderHeader = function () {
@@ -67,8 +79,6 @@ V.renderGraphic = async function () {
   Barre.updateData(seriesData, xAxisData);
 };
 
-
-
 V.renderCourbe = async function () {
   Courbe.init();
 
@@ -79,8 +89,6 @@ V.renderCourbe = async function () {
 
   Courbe.updateData(seriesData, xAxisData);
 };
-
-
 
 V.renderBarreCourbe = async function () {
   BarreCourbe.init();
@@ -105,18 +113,60 @@ V.renderBarreCourbe = async function () {
   BarreCourbe.updateData(series, xAxisData, newlegendData);
 };
 
-
-
-
 V.renderDemicercle = async function () {
-    let stock= await Products.fetchIteration7();
-Demicercle.init();
+  let stock = await Products.fetchIteration7();
+  Demicercle.init();
 
-let newstock = stock.map((stock) => {
+  let newstock = stock.map((stock) => {
     return { value: stock.stock, name: stock.product_name };
   });
 
-Demicercle.updateData(newstock);
-}
+  Demicercle.updateData(newstock);
+};
+
+V.renderChoix = async function () {
+  let products = await Products.fetchIteration8();
+  let prod = ChoixView.render(products);
+
+  document.querySelector("#choix").innerHTML = prod;
+};
+
+V.renderproduct = async function (value) {
+  Couche.init();
+
+  if (value === "all") {
+    let order = await Orders.fetchIteration8none();
+    let productdate = await Products.fetchIteration8date();
+
+    let all = true;
+
+    let xAxisData = productdate.map((item) => item.month);
+    Couche.updateData(order, xAxisData, all);
+  } else {
+    let order = await Orders.fetchIteration8(value);
+    let productdate = await Products.fetchIteration8date();
+
+    let SeriesData = order.map((item) => item.total_quantity_sold);
+
+    let xAxisData = productdate.map((item) => item.month);
+    let all = false;
+
+    Couche.updateData(SeriesData, xAxisData, all);
+  }
+};
+
+C.handler_clickOnproduct = async function (event) {
+  Couche.init();
+
+  try {
+    let value = event.target.options[event.target.selectedIndex].value;
+
+    V.renderproduct(value);
+  } catch (e) {
+    console.error("No value attribute");
+  }
+};
+
+
 
 C.init();

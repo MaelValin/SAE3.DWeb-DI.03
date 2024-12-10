@@ -36,6 +36,18 @@ class OrdersController extends Controller {
         if ($stat=='iteration6'){
             return $this->orders->getStatInteration6();
         }
+
+        $stat = $request->getParam('stat');
+        $id = $request->getParam('id');
+        if ($stat == 'iteration8' && $id) {
+            return $this->orders->getStatInteration8($id);
+        }
+
+        $stat = $request->getParam('stat');
+        if ($stat=='iteration8none'){
+            return $this->orders->getStatInteration8idnone();
+        }
+        
         
         $id = $request->getId("id");
         if ($id){

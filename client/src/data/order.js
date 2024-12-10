@@ -32,6 +32,18 @@ Orders.fetchIteration6= async function(){
 
 }
 
+Orders.fetchIteration8= async function(id){
+    let data = await getRequest('orders?stat=iteration8&id='+id);
+    return data;
+
+}
+
+Orders.fetchIteration8none= async function(id){
+    let data = await getRequest('orders?stat=iteration8none');
+    return data;
+
+}
+
 Orders.fetchAll = async function(){
     let data = await getRequest('orders');
     return data;

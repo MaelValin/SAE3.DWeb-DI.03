@@ -20,6 +20,17 @@ Products.fetchIteration7= async function(){
 
 }
 
+Products.fetchIteration8= async function(){
+    let data = await getRequest('products?stat=iteration8');
+    return data;
+
+}
+
+Products.fetchIteration8date= async function(){
+    let data = await getRequest('products?stat=iteration8-date');
+    return data;
+
+}
 
 
 export {Products};

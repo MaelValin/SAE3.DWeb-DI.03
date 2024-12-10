@@ -60,6 +60,29 @@ LIMIT 10;
         return $answer;
     }
 
+    public function getStatInteration8(){
+        $requete = $this->cnx->prepare("SELECT id, product_name, stock
+FROM Products
+ORDER BY product_name ASC;
+");
+
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    
+public function getStatInteration8date(){
+    $requete = $this->cnx->prepare("SELECT DISTINCT DATE_FORMAT(order_date, '%Y-%m') AS month
+FROM Orders
+ORDER BY month Asc
+LIMIT 12;
+"); 
+$requete->execute();
+$answer = $requete->fetchAll(PDO::FETCH_OBJ);
+return $answer;
+}
+
     public function save($product){
         // Not implemented ! TODO when needed !          
         return false;

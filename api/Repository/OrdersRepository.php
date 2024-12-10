@@ -133,6 +133,68 @@ ORDER BY
     }
 
 
+    public function getStatInteration8($id){
+        $requete = $this->cnx->prepare("SELECT 
+p.product_name,
+    DATE_FORMAT(o.order_date, '%Y-%m') AS month,
+    SUM(oi.quantity) AS total_quantity_sold
+FROM 
+    Orders o
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+    JOIN 
+    Products p ON oi.product_id = p.id
+WHERE 
+    oi.product_id = $id
+    AND o.order_date >= CURDATE() - INTERVAL 12 MONTH
+GROUP BY 
+    DATE_FORMAT(o.order_date, '%Y-%m')
+ORDER BY 
+    month ASC;
+
+
+
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    public function getStatInteration8idnone(){
+        $requete = $this->cnx->prepare("SELECT 
+    p.product_name,
+    DATE_FORMAT(o.order_date, '%Y-%m') AS month,
+    SUM(oi.quantity) AS total_quantity_sold
+FROM 
+    Orders o
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+JOIN 
+    Products p ON oi.product_id = p.id
+WHERE 
+    o.order_date >= CURDATE() - INTERVAL 12 MONTH
+GROUP BY 
+    p.product_name,
+    DATE_FORMAT(o.order_date, '%Y-%m')
+ORDER BY 
+    month ASC, 
+    p.product_name ASC;
+
+    month ASC;
+
+
+
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+
     
 
 }

@@ -22,6 +22,17 @@ class ProductsController extends Controller {
             return $this->products->getStatInteration7();
         }
 
+
+        $stat = $request->getParam('stat');
+        if ($stat=='iteration8'){
+            return $this->products->getStatInteration8();
+        }
+
+        $stat = $request->getParam('stat');
+        if ($stat=='iteration8-date'){
+            return $this->products->getStatInteration8date();
+        }
+
         $id = $request->getId("id");
         if ($id){
             // URI is .../Products/{id}
