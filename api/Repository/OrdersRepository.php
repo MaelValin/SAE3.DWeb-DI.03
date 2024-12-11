@@ -120,7 +120,7 @@ WHERE
 GROUP BY 
     month, product_category
 ORDER BY 
-   product_category DESC, month ASC;
+   product_category ASC, month ASC;
 
 
 
@@ -180,9 +180,9 @@ GROUP BY
     DATE_FORMAT(o.order_date, '%Y-%m')
 ORDER BY 
     month ASC, 
-    p.product_name ASC;
+    p.product_name DESC;
 
-    month ASC;
+   
 
 
 
