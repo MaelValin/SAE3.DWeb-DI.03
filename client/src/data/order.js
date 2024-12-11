@@ -38,7 +38,7 @@ Orders.fetchIteration8= async function(id){
 
 }
 
-Orders.fetchIteration8none= async function(id){
+Orders.fetchIteration8none= async function(){
     let data = await getRequest('orders?stat=iteration8none');
     return data;
 

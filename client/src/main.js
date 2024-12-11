@@ -4,13 +4,17 @@ import { Barre } from "./ui/graphic/barre.js";
 import { Courbe } from "./ui/graphic/courbe.js";
 import { BarreCourbe } from "./ui/graphic/barrecourbe.js";
 import { Demicercle } from "./ui/graphic/demicercle.js";
+import { TarteBarre } from "./ui/graphic/tartebarre.js";
 import { ChoixView } from "./ui/choix/script.js";
+import { ChoixclientView } from "./ui/choixclient/script.js";
 import { Couche } from "./ui/graphic/couche.js";
 import { GraphProdView } from "./ui/graphicprod/script.js";
+import { GraphClientView } from "./ui/graphicclient/script.js";
 
 import { Orderitems } from "./data/orderitems.js";
 import { Products } from "./data/products.js";
 import { Orders } from "./data/order.js";
+import { Clients } from "./data/clients.js";
 
 let C = {};
 
@@ -27,6 +31,7 @@ let V = {
   demicercle: document.querySelector("#graphic-demicercle"),
   choix: document.querySelector("#choix"),
   graphicprod: document.querySelector("#graphic-produits"),
+  graphicclients: document.querySelector("#graphic-clients"),
 };
 
 V.init = function () {
@@ -36,23 +41,26 @@ V.init = function () {
   V.renderCourbe();
   V.renderBarreCourbe();
   V.renderDemicercle();
-  
 
   if (document.querySelector("#graphic-produits")) {
     V.rendergraphprod();
     if (document.querySelector("#choix")) {
       V.renderChoix();
-      V.renderproduct('all');
+      V.renderproduct("all");
       let product = document.querySelector("#choix");
       product.addEventListener("click", C.handler_clickOnproduct);
     }
   }
-  
 
-  
-
-
-  
+  if (document.querySelector("#graphic-clients")) {
+    V.rendergraphclient();
+    if (document.querySelector("#choixclient")) {
+      V.renderChoixclient();
+      V.renderclient("all");
+      let client = document.querySelector("#choixclient");
+      client.addEventListener("click", C.handler_clickOnclient);
+    }
+  }
 };
 
 V.renderHeader = function () {
@@ -61,7 +69,11 @@ V.renderHeader = function () {
 
 V.rendergraphprod = function () {
   V.graphicprod.innerHTML = GraphProdView.render();
-}
+};
+
+V.rendergraphclient = function () {
+  V.graphicclients.innerHTML = GraphClientView.render();
+};
 
 V.renderMain = async function () {
   // Initialiser le graphique
@@ -146,8 +158,6 @@ V.renderChoix = async function () {
   document.querySelector("#choix").innerHTML = prod;
 };
 
-
-
 V.renderproduct = async function (value) {
   Couche.init();
 
@@ -173,7 +183,7 @@ V.renderproduct = async function (value) {
 };
 
 C.handler_clickOnproduct = async function (event) {
-  Couche.init();
+  
 
   try {
     let value = event.target.options[event.target.selectedIndex].value;
@@ -185,5 +195,57 @@ C.handler_clickOnproduct = async function (event) {
 };
 
 
+
+V.renderChoixclient = async function () {
+  let clients = await Clients.fetchIteration9client();
+  let cli = ChoixclientView.render(clients);
+
+  document.querySelector("#choixclient").innerHTML = cli;
+};
+
+V.renderclient = async function (value) {
+  TarteBarre.init();
+
+  if (value === "all") {
+    let datacategory = await Clients.fetchIteration9allcategory();
+    let dataprod = await Clients.fetchIteration9allproduct();
+    let newdataproduct = dataprod.map((item) => {
+      return `${item.Product}: ${item.Total_Quantity}`;
+    });
+
+    let newdatacategory = datacategory.map((item) => {
+      return `'${item.category}': ${item.total_quantity}`;
+    });
+    let all = true;
+    TarteBarre.updateData(newdataproduct, newdatacategory, all);
+  } 
+  else {
+    let dataprod = await Clients.fetchIteration9product(value);
+    let datacategory = await Clients.fetchIteration9category(value);
+    let newdataproduct = dataprod.map((item) => {
+      return `${item.Product}: ${item.Total_Quantity}`;
+    });
+
+    let newdatacategory = datacategory.map((item) => {
+      return `'${item.category}': ${item.total_quantity}`;
+    });
+    let all = false;
+    TarteBarre.updateData(newdataproduct, newdatacategory, all);
+  }
+};
+
+
+
+C.handler_clickOnclient = async function (event) {
+  
+
+  try {
+    let value = event.target.options[event.target.selectedIndex].value;
+    V.renderclient(value);
+    console.log(value);
+  } catch (e) {
+    console.error("No value attribute");
+  }
+};
 
 C.init();

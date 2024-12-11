@@ -62,6 +62,121 @@ class ClientsRepository extends EntityRepository {
         return $res;
     }
 
+
+    public function getStatInteration9category($id){
+        $requete = $this->cnx->prepare("SELECT 
+    p.category AS category,
+    SUM(oi.quantity) AS total_quantity
+FROM 
+    Clients c
+JOIN 
+    Orders o ON c.id = o.client_id
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+JOIN 
+    Products p ON oi.product_id = p.id
+WHERE 
+    c.id = $id
+GROUP BY 
+    p.category;
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    public function getStatInteration9product($id){
+        $requete = $this->cnx->prepare("SELECT 
+    P.product_name AS Product,
+    SUM(OI.quantity) AS Total_Quantity
+FROM 
+    Clients C
+JOIN 
+    Orders O ON C.id = O.client_id
+JOIN 
+    OrderItems OI ON O.id = OI.order_id
+JOIN 
+    Products P ON OI.product_id = P.id
+WHERE 
+    C.id = $id
+   
+GROUP BY 
+     P.product_name
+ORDER BY 
+     Product;
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+
+    public function getStatInteration9allcategory(){
+        $requete = $this->cnx->prepare("SELECT 
+    p.category AS category,
+    SUM(oi.quantity) AS total_quantity
+FROM 
+    Clients c
+JOIN 
+    Orders o ON c.id = o.client_id
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+JOIN 
+    Products p ON oi.product_id = p.id
+GROUP BY 
+    p.category;
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    public function getStatInteration9allproduct(){
+        $requete = $this->cnx->prepare("SELECT 
+    P.product_name AS Product,
+    SUM(OI.quantity) AS Total_Quantity
+FROM 
+    Clients C
+JOIN 
+    Orders O ON C.id = O.client_id
+JOIN 
+    OrderItems OI ON O.id = OI.order_id
+JOIN 
+    Products P ON OI.product_id = P.id
+   
+GROUP BY 
+     P.product_name
+ORDER BY 
+     Product;
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+
+    public function getStatInteration9client(){
+        $requete = $this->cnx->prepare("SELECT id, first_name, last_name FROM Clients order by first_name asc
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+   
+
+
+
     public function save($client){
         // Not implemented ! TODO when needed !          
         return false;

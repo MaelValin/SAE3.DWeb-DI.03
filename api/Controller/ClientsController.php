@@ -16,6 +16,34 @@ class ClientsController extends Controller {
 
    
     protected function processGetRequest(HttpRequest $request) {
+
+        $stat = $request->getParam('stat');
+        if ($stat == 'iteration9client') {
+            return $this->clients->getStatInteration9client();
+        }
+
+        $stat = $request->getParam('stat');
+        if ($stat == 'iteration9allcategory') {
+            return $this->clients->getStatInteration9allcategory();
+        }
+
+        $stat = $request->getParam('stat');
+        if ($stat == 'iteration9allproduct') {
+            return $this->clients->getStatInteration9allproduct();
+        }
+
+        $stat = $request->getParam('stat');
+        $id = $request->getParam('id');
+        if ($stat == 'iteration9category' && $id) {
+            return $this->clients->getStatInteration9category($id);
+        }
+
+        $stat = $request->getParam('stat');
+        $id = $request->getParam('id');
+        if ($stat == 'iteration9product' && $id) {
+            return $this->clients->getStatInteration9product($id);
+        }
+
         $id = $request->getId("id");
         if ($id){
             // URI is .../clients/{id}

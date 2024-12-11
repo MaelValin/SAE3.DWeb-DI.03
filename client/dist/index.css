@@ -554,6 +554,10 @@ video {
   display: none;
 }
 
+.flex {
+  display: flex;
+}
+
 .h-screen {
   height: 100vh;
 }
@@ -570,6 +574,14 @@ video {
   width: 100svw;
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
+.gap-12 {
+  gap: 3rem;
+}
+
 .bg-gray-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
@@ -582,6 +594,14 @@ video {
 
 .p-4 {
   padding: 1rem;
+}
+
+.p-16 {
+  padding: 4rem;
+}
+
+.pb-24 {
+  padding-bottom: 6rem;
 }
 
 .text-center {
