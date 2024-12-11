@@ -46,85 +46,93 @@ export const TarteBarre = {
         canvas.width = canvas.height = 10;
         
         this.option = {
-            tooltip: {},
+            tooltip: {
+            trigger: 'axis'
+            },
             title: [
-                {
-                    text: 'Les produits achetés par le client',
-                    left: '25%',
-                    textAlign: 'center'
-                },
-                {
-                    text: 'les categories de produits achetés par le client',
-                    left: '75%',
-                    top: '25%',
-                    textAlign: 'center'
-                },
+            {
+                text: 'Les produits achetés par le client',
+                left: '25%',
+                textAlign: 'center',
+                fontSize: 12,
+            },
+            {
+                text: 'les categories de produits achetés par le client',
+                left: '75%',
+                top: '20%',
+                textAlign: 'center',
+                fontSize: 8,
+                
+            },
             ],
             grid: [
-                {
-                    top: 50,
-                    width: '50%',
-                    bottom: '5%',
-                    left: 10,
-                    containLabel: true
-                },
-                {
-                    top: '50%',
-                    width: '50%',
-                    bottom: 0,
-                    left: 10,
-                    containLabel: true
-                }
+            {
+                top: 50,
+                width: '50%',
+                bottom: '0%',
+                left: 10,
+                containLabel: true
+            },
+            {
+                top: '50%',
+                width: '50%',
+                bottom: 0,
+                left: 10,
+                containLabel: true
+            }
             ],
             xAxis: [
-                {
-                    type: 'value',
-                    max: builderJson.all,
-                    splitLine: {
-                        show: false
-                    }
-                }
-                
+            {
+                type: 'value',
+                max: builderJson.all,
+                splitLine: {
+                show: false
+                },
+            }
             ],
             yAxis: [
-                {
-                    type: 'category',
-                    data: Object.keys(builderJson.charts),
-                    axisLabel: {
-                        interval: 0,
-                        rotate: 30
-                    },
-                    splitLine: {
-                        show: false
-                    }
+            {
+                type: 'category',
+                data: Object.keys(builderJson.charts),
+                axisLabel: {
+                interval: 0,
+                fontSize: 8,
+                padding: [0, 0, 1, 0]
+                },
+                splitLine: {
+                show: false
                 }
-                
+            }
             ],
             series: [
-                {
-                    type: 'bar',
-                    stack: 'chart',
-                    z: 3,
-                    label: {
-                        position: 'right',
-                        show: true
-                    },
-                    data: Object.keys(builderJson.charts).map(function (key) {
-                        return builderJson.charts[key];
-                    })
+            {
+                type: 'bar',
+                stack: 'chart',
+                z: 3,
+                
+                label: {
+                position: 'right',
+                show: true,
                 },
-                {
-                    type: 'pie',
-                    radius: [0, '30%'],
-                    center: ['75%', '50%'],
-                    data: Object.keys(DataPie).map(function (key) {
-                        return {
-                            name: key,
-                            value: DataPie[key]
-                        };
-                    })
+                data: Object.keys(builderJson.charts).map(function (key) {
+                return builderJson.charts[key];
+                })
+            },
+            {
+                type: 'pie',
+                radius: [0, '30%'],
+                center: ['75%', '50%'],
+                tooltip: {
+                trigger: 'item',
+                
                 },
-               
+                data: Object.keys(DataPie).map(function (key) {
+                return {
+                    name: key,
+                    value: DataPie[key]
+                };
+                })
+            },
             ]
         };
 
@@ -153,10 +161,10 @@ export const TarteBarre = {
 
     if(all==true){
         this.option.title[0].text='Les produits achetés par les clients';
-        this.option.title[1].text='les categories de produits achetés par les clients';
+        this.option.title[1].text='les categories de produits achetés';
     } else {
         this.option.title[0].text='Les produits achetés par le client';
-        this.option.title[1].text='les categories de produits achetés par le client';
+        this.option.title[1].text='les categories de produits achetés';
     }
     
 

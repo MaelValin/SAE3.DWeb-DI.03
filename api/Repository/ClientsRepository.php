@@ -105,7 +105,7 @@ WHERE
 GROUP BY 
      P.product_name
 ORDER BY 
-     Product;
+     Product desc;
 
 
 ");
@@ -153,7 +153,7 @@ JOIN
 GROUP BY 
      P.product_name
 ORDER BY 
-     Product;
+     Product DESC;
 
 
 ");

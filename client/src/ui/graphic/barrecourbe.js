@@ -14,6 +14,7 @@ export const BarreCourbe = {
         this.option = {
             title: {
                 text: 'Revenus totaux par Categorie',
+                top: '0%',
             },
             tooltip: {
                 trigger: 'axis',
@@ -33,7 +34,8 @@ export const BarreCourbe = {
                 }
             },
             legend: {
-                data: ['Evaporation', 'Precipitation', 'Temperature']
+                data: ['Evaporation', 'Precipitation', 'Temperature'],
+                top: '10%',
             },
             xAxis: [
                 {
@@ -57,6 +59,8 @@ export const BarreCourbe = {
                 {
                     name: 'Montant',
                     type: 'bar',
+                    top: '20%',
+                    bottom: '0%',
                     tooltip: {
                         valueFormatter: function (value) {
                             return value + ' $';

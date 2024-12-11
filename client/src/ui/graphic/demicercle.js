@@ -19,10 +19,10 @@ export const Demicercle = {
             tooltip: {
                 trigger: 'item'
             },
-            legend: {
+            /*legend: {
                 top: '5%',
                 left: 'center'
-            },
+            },*/
             series: [
                 {
                     name: 'Stock Faible',

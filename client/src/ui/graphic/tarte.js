@@ -13,9 +13,10 @@ export const Tarte = {
     this.option = {
       title: {
         text: 'Livraison des commandes',
+        top: '0%',
       },
       tooltip: { trigger: 'item' },
-      legend: { top: '5%', left: 'center' },
+      legend: { top: '15%', left: 'center' },
       series: [
         {
           name: 'Statut des commandes',
@@ -23,6 +24,8 @@ export const Tarte = {
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
           label: { show: false, position: 'center' },
+          top: '25%',
+          bottom: '0%',
           emphasis: {
             label: {
               show: true,
