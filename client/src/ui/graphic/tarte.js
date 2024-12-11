@@ -43,7 +43,13 @@ export const Tarte = {
     };
 
     this.chart.setOption(this.option); // Appliquer l'option initiale
+
+    window.addEventListener('resize', () => {
+      this.chart.resize();
+    });
   },
+
+  
 
   updateData: function(newData) {
     if (!this.option.series || !this.option.series[0]) {
@@ -58,4 +64,3 @@ export const Tarte = {
     this.chart.setOption(this.option);
   },
 };
-

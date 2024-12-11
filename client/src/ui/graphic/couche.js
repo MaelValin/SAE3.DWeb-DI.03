@@ -4,11 +4,15 @@ export const Couche = {
 
   init: function() {
     const dom = document.getElementById('graphic-product');
+    
     this.chart = echarts.init(dom, null, {
       renderer: 'canvas',
       useDirtyRect: false
     });
 
+    const canvas = document.createElement('canvas');
+        
+    canvas.width = canvas.height = 10;
     // Options initiales du graphique
     this.option = {
           tooltip: {
@@ -61,7 +65,9 @@ export const Couche = {
       this.chart.setOption(this.option);
     }
 
-    window.addEventListener('resize', this.chart.resize);
+    window.addEventListener('resize', () => {
+      this.chart.resize();
+    });
   },
 
   updateData: function(newSeriesData, newXAxisData, all) {

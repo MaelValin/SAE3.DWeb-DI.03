@@ -73,7 +73,9 @@ export const BarreCourbe = {
             this.chart.setOption(this.option);
         }
 
-        window.addEventListener('resize', this.chart.resize);
+        window.addEventListener('resize', () => {
+            this.chart.resize();
+          });
     },
 
     updateData: function(newSeriesData, newXAxisData, newlegendData) {

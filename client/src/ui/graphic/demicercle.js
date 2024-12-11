@@ -4,6 +4,7 @@ export const Demicercle = {
 
     init: function() {
         const chartDom = document.getElementById('graphic-demicercle');
+        
         this.chart = echarts.init(chartDom, null, {
             renderer: 'canvas',
             useDirtyRect: false
@@ -51,7 +52,9 @@ export const Demicercle = {
             this.chart.setOption(this.option);
         }
 
-        window.addEventListener('resize', this.chart.resize);
+        window.addEventListener('resize', () => {
+            this.chart.resize();
+          });
     },
 
     updateData: function(newSeriesData) {

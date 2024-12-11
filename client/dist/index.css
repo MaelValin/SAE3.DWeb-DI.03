@@ -554,6 +554,14 @@ video {
   display: none;
 }
 
+.relative {
+  position: relative;
+}
+
+.left-8 {
+  left: 2rem;
+}
+
 .flex {
   display: flex;
 }
@@ -566,6 +574,30 @@ video {
   height: 100svh;
 }
 
+.h-auto {
+  height: auto;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-96 {
+  height: 24rem;
+}
+
+.h-\[600px\] {
+  height: 600px;
+}
+
+.min-h-12 {
+  min-height: 3rem;
+}
+
+.min-h-\[600px\] {
+  min-height: 600px;
+}
+
 .w-screen {
   width: 100vw;
 }
@@ -574,12 +606,55 @@ video {
   width: 100svw;
 }
 
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.w-max {
+  width: -moz-max-content;
+  width: max-content;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.min-w-12 {
+  min-width: 3rem;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
 .flex-col {
   flex-direction: column;
 }
 
 .gap-12 {
   gap: 3rem;
+}
+
+.gap-16 {
+  gap: 4rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.border-dashed {
+  border-style: dashed;
+}
+
+.border-red-50 {
+  --tw-border-opacity: 1;
+  border-color: rgb(254 242 242 / var(--tw-border-opacity, 1));
 }
 
 .bg-gray-100 {
@@ -608,18 +683,59 @@ video {
   text-align: center;
 }
 
+.font-sans {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.font-serif {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 
 .font-extrabold {
   font-weight: 800;
 }
 
+.font-black {
+  font-weight: 900;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
 .text-black {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-700 {
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-800 {
+  --tw-text-opacity: 1;
+  color: rgb(30 41 59 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-800 {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-700 {
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity, 1));
 }
 
 * {

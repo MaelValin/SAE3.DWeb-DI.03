@@ -4,6 +4,7 @@ export const Barre = {
 
     init: function() {
         const chartDom = document.getElementById('graphic-barre');
+        
         this.chart = echarts.init(chartDom, null, {
             renderer: 'canvas',
             useDirtyRect: false
@@ -54,7 +55,9 @@ export const Barre = {
             this.chart.setOption(this.option);
         }
 
-        window.addEventListener('resize', this.chart.resize);
+        window.addEventListener('resize', () => {
+            this.chart.resize();
+          });
     },
 
     updateData: function(newSeriesData, newXAxisData) {

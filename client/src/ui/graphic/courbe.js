@@ -4,6 +4,7 @@ export const Courbe = {
 
   init: function() {
     const dom = document.getElementById('graphic-courbe');
+  
     this.chart = echarts.init(dom, null, {
       renderer: 'canvas',
       useDirtyRect: false
@@ -52,7 +53,9 @@ export const Courbe = {
       this.chart.setOption(this.option);
     }
 
-    window.addEventListener('resize', this.chart.resize);
+    window.addEventListener('resize', () => {
+      this.chart.resize();
+    });
   },
 
   updateData: function(newSeriesData, newXAxisData) {

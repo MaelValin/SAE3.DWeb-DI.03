@@ -4,6 +4,7 @@ export const TarteBarre = {
 
     init: function() {
         const chartDom = document.getElementById('graphic-client');
+        
         this.chart = echarts.init(chartDom, null, {
             renderer: 'canvas',
             useDirtyRect: false
@@ -129,7 +130,9 @@ export const TarteBarre = {
 
         this.chart.setOption(this.option); // Appliquer l'option initiale
 
-        window.addEventListener('resize', this.chart.resize);
+        window.addEventListener('resize', () => {
+            this.chart.resize();
+          });
     },
 
    updateData: function(newDataproduct, newDatacategory, all) {
