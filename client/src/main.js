@@ -6,6 +6,7 @@ import { BarreCourbe } from "./ui/graphic/barrecourbe.js";
 import { Demicercle } from "./ui/graphic/demicercle.js";
 import { ChoixView } from "./ui/choix/script.js";
 import { Couche } from "./ui/graphic/couche.js";
+import { GraphProdView } from "./ui/graphicprod/script.js";
 
 import { Orderitems } from "./data/orderitems.js";
 import { Products } from "./data/products.js";
@@ -25,6 +26,7 @@ let V = {
   barrecourbe: document.querySelector("#graphic-barrecourbe"),
   demicercle: document.querySelector("#graphic-demicercle"),
   choix: document.querySelector("#choix"),
+  graphicprod: document.querySelector("#graphic-produits"),
 };
 
 V.init = function () {
@@ -34,12 +36,21 @@ V.init = function () {
   V.renderCourbe();
   V.renderBarreCourbe();
   V.renderDemicercle();
-  V.renderChoix();
-  V.renderproduct('all');
+  
 
+  if (document.querySelector("#graphic-produits")) {
+    V.rendergraphprod();
+    if (document.querySelector("#choix")) {
+      V.renderChoix();
+      V.renderproduct('all');
+      let product = document.querySelector("#choix");
+      product.addEventListener("click", C.handler_clickOnproduct);
+    }
+  }
+  
 
-  let product = document.querySelector("#choix");
-  product.addEventListener("click", C.handler_clickOnproduct);
+  
+
 
   
 };
@@ -47,6 +58,10 @@ V.init = function () {
 V.renderHeader = function () {
   V.header.innerHTML = HeaderView.render();
 };
+
+V.rendergraphprod = function () {
+  V.graphicprod.innerHTML = GraphProdView.render();
+}
 
 V.renderMain = async function () {
   // Initialiser le graphique
@@ -130,6 +145,8 @@ V.renderChoix = async function () {
 
   document.querySelector("#choix").innerHTML = prod;
 };
+
+
 
 V.renderproduct = async function (value) {
   Couche.init();

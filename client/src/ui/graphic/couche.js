@@ -11,34 +11,31 @@ export const Couche = {
 
     // Options initiales du graphique
     this.option = {
-      title: {
-        text: 'Total des ventes sur les 12 derniers mois'//modify
-      },
-      tooltip: {
-        trigger: 'item',
-        axisPointer: {
-          type: 'cross',
-          label: {
+          tooltip: {
+            trigger: 'item',
+            axisPointer: {
+              type: 'cross',
+              label: {
             backgroundColor: '#6a7985'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {}
-        }
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: [
-        {
-          type: 'category',
-          boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] //modify
+              }
+            }
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              boundaryGap: false,
+              data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] //modify
         }
       ],
       yAxis: [
@@ -48,7 +45,6 @@ export const Couche = {
       ],
       series: [//modify
         {
-          name: 'Email',
           type: 'line',
           stack: 'Total',
           areaStyle: {},
@@ -69,6 +65,7 @@ export const Couche = {
   },
 
   updateData: function(newSeriesData, newXAxisData, all) {
+
     // Vérifiez que 'option' est bien initialisé
     if (!this.option) {
       console.error("Erreur : 'option' n'est pas encore initialisé.");
@@ -83,6 +80,9 @@ export const Couche = {
 
     // Mettre à jour les données dans 'series'
     if (all==true) {
+
+      this.option.tooltip.trigger= 'item';
+
       const groupedData = newSeriesData.reduce((acc, item) => {
         if (!acc[item.product_name]) {
           acc[item.product_name] = [];
@@ -102,6 +102,7 @@ export const Couche = {
         data: groupedData[productName]
       }));
     }else{
+      this.option.tooltip.trigger= 'axis';
       if (newSeriesData){
         this.option.series[0].data = newSeriesData;
         
