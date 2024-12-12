@@ -44,6 +44,23 @@ class ClientsController extends Controller {
             return $this->clients->getStatInteration9product($id);
         }
 
+        $stat = $request->getParam('stat');
+        $month = $request->getParam('month');
+        if ($stat == 'iteration11' && $month) {
+            return $this->clients->getStatInteration11($month);
+        }
+
+        $stat = $request->getParam('stat');
+        if ($stat == 'iteration11all') {
+            return $this->clients->getStatInteration11all();
+        }
+
+        $stat = $request->getParam('stat');
+        
+        if ($stat == 'iteration11date') {
+            return $this->clients->getStatInteration11date();
+        }
+
         $id = $request->getId("id");
         if ($id){
             // URI is .../clients/{id}

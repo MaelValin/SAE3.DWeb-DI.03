@@ -162,6 +162,84 @@ ORDER BY
         return $answer;
     }
 
+    public function getStatInteration11($month){
+        $requete = $this->cnx->prepare("SELECT 
+    c.lat, 
+    c.lng, 
+    p.product_name AS product_name,    
+COUNT(oi.product_id) AS product_count, 
+    DATE_FORMAT(o.order_date, '%Y-%m') AS month_year
+FROM 
+    Clients c
+JOIN 
+    Orders o ON c.id = o.client_id
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+JOIN 
+    Products p ON oi.product_id = p.id  
+WHERE 
+    DATE_FORMAT(o.order_date, '%Y-%m') = $month  
+    AND o.order_status = 'shipped' 
+GROUP BY 
+    c.lat, c.lng, p.product_name, month_year  
+ORDER BY 
+    month_year;
+
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    public function getStatInteration11all(){
+        $requete = $this->cnx->prepare("SELECT 
+    c.lat, 
+    c.lng, 
+    p.product_name AS product_name,    
+COUNT(oi.product_id) AS product_count 
+    
+FROM 
+    Clients c
+JOIN 
+    Orders o ON c.id = o.client_id
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+JOIN 
+    Products p ON oi.product_id = p.id  
+WHERE  
+ o.order_status = 'shipped' 
+GROUP BY 
+    c.lat, c.lng, p.product_name
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    public function getStatInteration11date(){
+        $requete = $this->cnx->prepare("SELECT DISTINCT 
+    DATE_FORMAT(o.order_date, '%Y-%m') AS month_year
+FROM 
+    Orders o
+ORDER BY 
+    month_year DESC;
+
+
+
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
+
+    
+
+    
+
 
     public function getStatInteration9client(){
         $requete = $this->cnx->prepare("SELECT id, first_name, last_name FROM Clients order by first_name asc

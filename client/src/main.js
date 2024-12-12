@@ -10,11 +10,13 @@ import { ChoixclientView } from "./ui/choixclient/script.js";
 import { Couche } from "./ui/graphic/couche.js";
 import { GraphProdView } from "./ui/graphicprod/script.js";
 import { GraphClientView } from "./ui/graphicclient/script.js";
-
+import { GraphMapView } from "./ui/graphicmap/script.js";
+import { ChoixmapView } from "./ui/choixmap/script.js";
 import { Orderitems } from "./data/orderitems.js";
 import { Products } from "./data/products.js";
 import { Orders } from "./data/order.js";
 import { Clients } from "./data/clients.js";
+import { Map } from "./ui/graphic/map.js";
 
 let C = {};
 
@@ -32,6 +34,7 @@ let V = {
   choix: document.querySelector("#choix"),
   graphicprod: document.querySelector("#graphic-produits"),
   graphicclients: document.querySelector("#graphic-clients"),
+  graphicmap: document.querySelector("#graphic-maps"),
 };
 
 V.init = function () {
@@ -61,6 +64,16 @@ V.init = function () {
       client.addEventListener("click", C.handler_clickOnclient);
     }
   }
+
+  if (document.querySelector("#graphic-maps")) {
+    V.rendergraphmap();
+    if (document.querySelector("#choixmap")) {
+      V.renderChoixmap();
+      V.rendermap("all");
+      let map = document.querySelector("#choixmap");
+      map.addEventListener("click", C.handler_clickOnmap);
+    }
+  }
 };
 
 V.renderHeader = function () {
@@ -73,6 +86,10 @@ V.rendergraphprod = function () {
 
 V.rendergraphclient = function () {
   V.graphicclients.innerHTML = GraphClientView.render();
+};
+
+V.rendergraphmap = function () {
+  V.graphicmap.innerHTML = GraphMapView.render();
 };
 
 V.renderMain = async function () {
@@ -242,10 +259,63 @@ C.handler_clickOnclient = async function (event) {
   try {
     let value = event.target.options[event.target.selectedIndex].value;
     V.renderclient(value);
-    console.log(value);
+    
   } catch (e) {
     console.error("No value attribute");
   }
 };
+
+
+V.renderChoixmap = async function () {
+  let map = await Clients.fetchIteration11date();
+  let m = ChoixmapView.render(map);
+  document.querySelector("#choixmap").innerHTML = m;
+};
+
+V.rendermap = async function (value) {
+  Map.init();
+
+  if (value === "all") {
+    let map = await Clients.fetchIteration11all();
+    let newdata = map.map((item) => {
+      return { name: item.product_name, value: item.product_count };
+    });
+   
+    let newgeocoormap = {};
+    map.forEach((item) => {
+      newgeocoormap[`${item.product_name}`] = [item.lat, item.lng];
+    });
+    
+    
+    Map.updateData(newdata,newgeocoormap);
+  } else {
+    let map = await Clients.fetchIteration11(`'${value}'`);
+    let newdata = map.map((item) => {
+      return { name: item.product_name, value: item.product_count };
+    });
+   
+    let newgeocoormap = {};
+    map.forEach((item) => {
+      newgeocoormap[`${item.product_name}`] = [item.lat, item.lng];
+    });
+    
+    
+    Map.updateData(newdata,newgeocoormap);
+  }
+  } 
+
+
+
+C.handler_clickOnmap = async function (event) {
+  Map.init();
+  try {
+    let value = event.target.options[event.target.selectedIndex].value;
+    V.rendermap(value);
+  } catch (e) {
+    console.error("No value attribute");
+  }
+}
+
+
 
 C.init();

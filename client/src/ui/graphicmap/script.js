@@ -1,13 +1,13 @@
-const templateFile = await fetch("./src/ui/graphicprod/template.html");
+const templateFile = await fetch("./src/ui/graphicmap/template.html");
 const template = await templateFile.text();
 
-let GraphProdView = {};
+let GraphMapView = {};
 
-GraphProdView.render = function(){
+GraphMapView.render = function(){
     return template;
 }
 
 
 
 
-export { GraphProdView };
+export { GraphMapView };
