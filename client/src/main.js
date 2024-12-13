@@ -10,8 +10,6 @@ import { ChoixclientView } from "./ui/choixclient/script.js";
 import { Couche } from "./ui/graphic/couche.js";
 import { GraphProdView } from "./ui/graphicprod/script.js";
 import { GraphClientView } from "./ui/graphicclient/script.js";
-import { GraphMapView } from "./ui/graphicmap/script.js";
-import { ChoixmapView } from "./ui/choixmap/script.js";
 import { Orderitems } from "./data/orderitems.js";
 import { Products } from "./data/products.js";
 import { Orders } from "./data/order.js";
@@ -44,6 +42,7 @@ V.init = function () {
   V.renderCourbe();
   V.renderBarreCourbe();
   V.renderDemicercle();
+  V.rendermap();
 
   if (document.querySelector("#graphic-produits")) {
     V.rendergraphprod();
@@ -65,15 +64,9 @@ V.init = function () {
     }
   }
 
-  if (document.querySelector("#graphic-maps")) {
-    V.rendergraphmap();
-    if (document.querySelector("#choixmap")) {
-      V.renderChoixmap();
-      V.rendermap("all");
-      let map = document.querySelector("#choixmap");
-      map.addEventListener("click", C.handler_clickOnmap);
-    }
-  }
+    
+    
+  
 };
 
 V.renderHeader = function () {
@@ -88,9 +81,7 @@ V.rendergraphclient = function () {
   V.graphicclients.innerHTML = GraphClientView.render();
 };
 
-V.rendergraphmap = function () {
-  V.graphicmap.innerHTML = GraphMapView.render();
-};
+
 
 V.renderMain = async function () {
   // Initialiser le graphique
@@ -266,55 +257,39 @@ C.handler_clickOnclient = async function (event) {
 };
 
 
-V.renderChoixmap = async function () {
-  let map = await Clients.fetchIteration11date();
-  let m = ChoixmapView.render(map);
-  document.querySelector("#choixmap").innerHTML = m;
-};
 
-V.rendermap = async function (value) {
+
+V.rendermap = async function () {
   Map.init();
 
-  if (value === "all") {
-    let map = await Clients.fetchIteration11all();
-    let newdata = map.map((item) => {
-      return { name: item.product_name, value: item.product_count };
-    });
-   
-    let newgeocoormap = {};
-    map.forEach((item) => {
-      newgeocoormap[`${item.product_name}`] = [item.lat, item.lng];
-    });
+  console.log("Map");
+    let map = await Orders.fetchIteration11();
+    
+    let yaxisdata = [...new Set(map.map((item) => item.country))];
+    let xaxisdata = [...new Set(map.map((item) => item.month_year))];
     
     
-    Map.updateData(newdata,newgeocoormap);
-  } else {
-    let map = await Clients.fetchIteration11(`'${value}'`);
-    let newdata = map.map((item) => {
-      return { name: item.product_name, value: item.product_count };
+    let quantity = [];
+
+    yaxisdata.forEach((country) => {
+      xaxisdata.forEach((month) => {
+      let item = map.find((data) => data.country === country && data.month_year === month);
+      quantity.push([
+        xaxisdata.indexOf(month),
+        yaxisdata.indexOf(country),
+        item ? item.total_quantity : 0
+      ]);
+      });
     });
-   
-    let newgeocoormap = {};
-    map.forEach((item) => {
-      newgeocoormap[`${item.product_name}`] = [item.lat, item.lng];
-    });
-    
-    
-    Map.updateData(newdata,newgeocoormap);
-  }
+    console.log(quantity);
+
+    Map.updateData(xaxisdata,yaxisdata, quantity);
+  
   } 
 
 
 
-C.handler_clickOnmap = async function (event) {
-  Map.init();
-  try {
-    let value = event.target.options[event.target.selectedIndex].value;
-    V.rendermap(value);
-  } catch (e) {
-    console.error("No value attribute");
-  }
-}
+
 
 
 

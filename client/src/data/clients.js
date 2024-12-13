@@ -43,22 +43,6 @@ Clients.fetchIteration9client= async function(){
 
 }
 
-Clients.fetchIteration11= async function(month){
-    let data = await getRequest('clients?stat=iteration11&month='+month);
-    return data;
 
-}
-
-Clients.fetchIteration11all= async function(){
-    let data = await getRequest('clients?stat=iteration11all');
-    return data;
-
-}
-
-Clients.fetchIteration11date= async function(){
-    let data = await getRequest('clients?stat=iteration11date');
-    return data;
-
-}
 
 export {Clients};

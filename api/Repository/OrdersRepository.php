@@ -182,12 +182,30 @@ ORDER BY
     month ASC, 
     p.product_name DESC;
 
-   
+");
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+        return $answer;
+    }
 
 
-
-
-
+    public function getStatInteration11(){
+        $requete = $this->cnx->prepare("SELECT 
+    c.country,
+    DATE_FORMAT(o.order_date, '%Y-%m') AS month_year,
+    SUM(oi.quantity) AS total_quantity
+FROM 
+    Orders o
+JOIN 
+    Clients c ON o.client_id = c.id
+JOIN 
+    OrderItems oi ON o.id = oi.order_id
+WHERE 
+    o.order_status = 'Delivered'  -- ou 'Shipped' si vous voulez inclure les commandes expédiées
+GROUP BY 
+    c.country, month_year
+ORDER BY 
+    c.country, month_year;
 ");
         $requete->execute();
         $answer = $requete->fetchAll(PDO::FETCH_OBJ);
